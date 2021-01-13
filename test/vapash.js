@@ -2,68 +2,68 @@
 /* global describe, it */
 
 var expect = require('chai').expect
-const Header = require('ethereumjs-block/header.js')
-const ethUtil = require('ethereumjs-util')
-const powTests = require('ethereumjs-testing').tests.powTests.ethash_tests
+const Header = require('vaporyjs-block/header.js')
+const vapUtil = require('vaporyjs-util')
+const powTests = require('vaporyjs-testing').tests.powTests.vapash_tests
 
 var messages = require('../js/messages')
 
-// ethash_light_compute(block_number, header_hash, nonce)
+// vapash_light_compute(block_number, header_hash, nonce)
 
 /**
- * @param {Object} ethash
+ * @param {Object} vapash
  */
-module.exports = function (Ethash) {
-  var ethash = new Ethash()
+module.exports = function (Vapash) {
+  var vapash = new Vapash()
 
-  describe('ethash_light_new', function () {
+  describe('vapash_light_new', function () {
     var tests = Object.keys(powTests)
 
     it('block_number should be a Number', function () {
       expect(function () {
-        ethash.ethash_light_new(null)
+        vapash.vapash_light_new(null)
       }).to.throw(TypeError, messages.BLOCKNUM_TYPE_INVALID)
 
       expect(function () {
-        ethash.ethash_light_new('ViddyWellLittleBrotherViddyWell')
+        vapash.vapash_light_new('ViddyWellLittleBrotherViddyWell')
       }).to.throw(TypeError, messages.BLOCKNUM_TYPE_INVALID)
     })
 
     tests.forEach(function (key) {
       var test = powTests[key]
       var header = new Header(new Buffer(test.header, 'hex'))
-      var block_number = ethUtil.bufferToInt(header.number)
+      var block_number = vapUtil.bufferToInt(header.number)
 
-      it('checking ethash_light_new results (powTests[\'' + key + '\'])', function () {
-        var light = ethash.ethash_light_new(block_number)
-        expect(ethUtil.sha3(light.cache).toString('hex')).to.equal(test.cache_hash)
+      it('checking vapash_light_new results (powTests[\'' + key + '\'])', function () {
+        var light = vapash.vapash_light_new(block_number)
+        expect(vapUtil.sha3(light.cache).toString('hex')).to.equal(test.cache_hash)
       })
     })
   })
 
-  describe('ethash_light_compute', function () {
+  describe('vapash_light_compute', function () {
     var test = powTests['first']
     var header = new Header(new Buffer(test.header, 'hex'))
-    var block_number = ethUtil.bufferToInt(header.number)
+    var block_number = vapUtil.bufferToInt(header.number)
     var header_hash = new Buffer(test.header_hash, 'hex')
     var nonce = new Buffer(test.nonce, 'hex')
-    var light = ethash.ethash_light_new(block_number)
+    var light = vapash.vapash_light_new(block_number)
 
     it('light object invalid', function () {
       expect(function () {
-        ethash.ethash_light_compute(null, header_hash, nonce)
+        vapash.vapash_light_compute(null, header_hash, nonce)
       }).to.throw(TypeError, messages.LIGHT_OBJ_INVALID)
 
       expect(function () {
         var l = {}
         l.block_number = light.block_number
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.LIGHT_OBJ_INVALID)
 
       expect(function () {
         var l = {}
         l.cache = light.cache
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.LIGHT_OBJ_INVALID)
     })
 
@@ -72,14 +72,14 @@ module.exports = function (Ethash) {
         var l = {}
         l.block_number = null
         l.cache = light.cache
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.BLOCKNUM_TYPE_INVALID)
 
       expect(function () {
         var l = {}
         l.block_number = 'DoTheySpeakEnglishInWhat?'
         l.cache = light.cache
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.BLOCKNUM_TYPE_INVALID)
     })
 
@@ -88,24 +88,24 @@ module.exports = function (Ethash) {
         var l = {}
         l.block_number = light.block_number
         l.cache = null
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.CACHE_TYPE_INVALID)
 
       expect(function () {
         var l = {}
         l.block_number = light.block_number
         l.cache = 'ILoveTheSmellOfNapalmInTheMorning'
-        ethash.ethash_light_compute(l, header_hash, nonce)
+        vapash.vapash_light_compute(l, header_hash, nonce)
       }).to.throw(TypeError, messages.CACHE_TYPE_INVALID)
     })
 
     it('header_hash should be a Buffer', function () {
       expect(function () {
-        ethash.ethash_light_compute(light, null, nonce)
+        vapash.vapash_light_compute(light, null, nonce)
       }).to.throw(TypeError, messages.HEADERHASH_TYPE_INVALID)
 
       expect(function () {
-        ethash.ethash_light_compute(light, 'SayHelloToMyLittleFriend', nonce)
+        vapash.vapash_light_compute(light, 'SayHelloToMyLittleFriend', nonce)
       }).to.throw(TypeError, messages.HEADERHASH_TYPE_INVALID)
     })
 
@@ -113,17 +113,17 @@ module.exports = function (Ethash) {
       var hash = new Buffer(test.header_hash.slice(0, -6), 'hex')
 
       expect(function () {
-        ethash.ethash_light_compute(light, hash, nonce)
+        vapash.vapash_light_compute(light, hash, nonce)
       }).to.throw(RangeError, messages.HEADERHASH_LENGTH_INVALID)
     })
 
     it('nonce should be a Buffer', function () {
       expect(function () {
-        ethash.ethash_light_compute(light, header_hash, null)
+        vapash.vapash_light_compute(light, header_hash, null)
       }).to.throw(TypeError, messages.NONCE_TYPE_INVALID)
 
       expect(function () {
-        ethash.ethash_light_compute(light, header_hash, 'AreYouTalkingToMe?')
+        vapash.vapash_light_compute(light, header_hash, 'AreYouTalkingToMe?')
       }).to.throw(TypeError, messages.NONCE_TYPE_INVALID)
     })
 
@@ -131,15 +131,15 @@ module.exports = function (Ethash) {
     tests.forEach(function (key) {
       var test = powTests[key]
       var header = new Header(new Buffer(test.header, 'hex'))
-      var block_number = ethUtil.bufferToInt(header.number)
+      var block_number = vapUtil.bufferToInt(header.number)
       var header_hash = new Buffer(test.header_hash, 'hex')
       var nonce = new Buffer(test.nonce, 'hex')
       var result = new Buffer(test.result, 'hex')
       var mixhash = new Buffer(test.mixhash, 'hex')
-      var light = ethash.ethash_light_new(block_number)
+      var light = vapash.vapash_light_new(block_number)
 
-      it('checking ethash_light_compute results (powTests[\'' + key + '\'])', function () {
-        var ret = ethash.ethash_light_compute(light, header_hash, nonce)
+      it('checking vapash_light_compute results (powTests[\'' + key + '\'])', function () {
+        var ret = vapash.vapash_light_compute(light, header_hash, nonce)
         expect(
           {mix_hash: ret.mix_hash.toString('hex'), result: ret.result.toString('hex')}
         ).to.eql(
@@ -158,8 +158,8 @@ module.exports = function (Ethash) {
       var test = powTests[key]
 
       it('checking mkcache results (powTests[\'' + key + '\'])', function () {
-        ethash.mkcache(test.cache_size, new Buffer(test.seed, 'hex'))
-        expect(ethash.cacheHash().toString('hex')).to.equal(test.cache_hash)
+        vapash.mkcache(test.cache_size, new Buffer(test.seed, 'hex'))
+        expect(vapash.cacheHash().toString('hex')).to.equal(test.cache_hash)
       })
     })
   })
@@ -177,10 +177,10 @@ module.exports = function (Ethash) {
       var result = new Buffer(test.result, 'hex')
       var mixhash = new Buffer(test.mixhash, 'hex')
 
-      ethash.mkcache(test.cache_size, new Buffer(test.seed, 'hex'))
+      vapash.mkcache(test.cache_size, new Buffer(test.seed, 'hex'))
 
       it('checking run results (powTests[\'' + key + '\'])', function () {
-        var ret = ethash.run(header_hash, nonce, fullSize)
+        var ret = vapash.run(header_hash, nonce, fullSize)
         expect(
           {mix_hash: ret.mix.toString('hex'), result: ret.hash.toString('hex')}
         ).to.eql(

@@ -1,5 +1,5 @@
-#ifndef _ETHASH_NODE_UTIL_
-#define _ETHASH_NODE_UTIL_
+#ifndef _VAPASH_NODE_UTIL_
+#define _VAPASH_NODE_UTIL_
 
 #include <sstream>
 #include <fstream>
@@ -10,7 +10,7 @@
 #include <node.h>
 #include <nan.h>
 
-#include "libethash/ethash.h"
+#include "libvapash/vapash.h"
 
 using namespace std;
 using byte = uint8_t;

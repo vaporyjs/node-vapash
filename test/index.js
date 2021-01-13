@@ -2,13 +2,13 @@
 /* global describe */
 
 /**
- * @param {Object} ethash
+ * @param {Object} vapash
  * @param {string} description
  */
-function test (ethash, description) {
+function test (vapash, description) {
   describe(description, function () {
-    require('./ethash')(ethash)
+    require('./vapash')(vapash)
   })
 }
 
-test(require('../js/bindings'), 'ethash bindings')
+test(require('../js/bindings'), 'vapash bindings')

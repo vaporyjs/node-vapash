@@ -1,13 +1,13 @@
 'use strict'
 
 const benchmark = require('benchmark')
-const Ethashcpp = require('../js/bindings')
-const Ethashjs = require('ethashjs')
-const powTests = require('ethereumjs-testing').tests.powTests.ethash_tests
+const Vapashcpp = require('../js/bindings')
+const Vapashjs = require('vapashjs')
+const powTests = require('vaporyjs-testing').tests.powTests.vapash_tests
 
 var implementations = {
-  bindings: new Ethashcpp(),
-  ethashjs: new Ethashjs()
+  bindings: new Vapashcpp(),
+  vapashjs: new Vapashjs()
 }
 
 var fixtureIndex = 0
@@ -70,16 +70,16 @@ function runSuite (suiteName, testFunctionGenerator) {
   suite.run()
 }
 
-runSuite('mkcache', function (ethash) {
+runSuite('mkcache', function (vapash) {
   return function () {
     var fixture = getNextFixture()
-    ethash.mkcache(fixture.cacheSize, fixture.seed)
+    vapash.mkcache(fixture.cacheSize, fixture.seed)
   }
 })
 
-runSuite('run', function (ethash) {
+runSuite('run', function (vapash) {
   return function () {
     var fixture = getNextFixture()
-    ethash.run(fixture.header_hash, fixture.nonce, fixture.fullSize)
+    vapash.run(fixture.header_hash, fixture.nonce, fixture.fullSize)
   }
 })

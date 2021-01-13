@@ -1,5 +1,5 @@
-#ifndef _ETHASH_NODE_MESSAGES_
-#define _ETHASH_NODE_MESSAGES_
+#ifndef _VAPASH_NODE_MESSAGES_
+#define _VAPASH_NODE_MESSAGES_
 
 #define BLOCKNUM_TYPE_INVALID "block_number should be a number"
 
@@ -17,7 +17,7 @@
 
 #define FULLSIZE_TYPE_INVALID "full_size should be a number"
 
-#define LIGHTNEW_NOMEM "not enough memory for ethash_light_new()"
-#define LIGHTCOMPUTE_ERROR "error processing ethash_light_compute()"
+#define LIGHTNEW_NOMEM "not enough memory for vapash_light_new()"
+#define LIGHTCOMPUTE_ERROR "error processing vapash_light_compute()"
 
 #endif

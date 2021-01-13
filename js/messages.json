@@ -15,8 +15,8 @@
 
   "FULLSIZE_TYPE_INVALID": "full_size should be a number",
 
-  "LIGHTNEW_NOMEM": "not enough memory for ethash_light_new()",
-  "LIGHTNEW_ERROR": "error processing ethash_light_compute()",
+  "LIGHTNEW_NOMEM": "not enough memory for vapash_light_new()",
+  "LIGHTNEW_ERROR": "error processing vapash_light_compute()",
 
   "LIGHT_OBJ_INVALID": "light should be { block_number: Number, cache: Buffer }"
 }

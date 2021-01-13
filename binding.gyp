@@ -1,11 +1,11 @@
 {
   "targets": [{
-    "target_name": "ethash",
+    "target_name": "vapash",
     "sources": [
-      "./src/ethash.cc",
-      "./src/ethash-src/src/libethash/io.c",
-      "./src/ethash-src/src/libethash/internal.c",
-      "./src/ethash-src/src/libethash/sha3.c"
+      "./src/vapash.cc",
+      "./src/vapash-src/src/libvapash/io.c",
+      "./src/vapash-src/src/libvapash/internal.c",
+      "./src/vapash-src/src/libvapash/sha3.c"
     ],
     "cflags_c": [
       "-std=gnu99",
@@ -23,7 +23,7 @@
       "-fno-exceptions"
     ],
     "include_dirs": [
-      "./src/ethash-src/src",
+      "./src/vapash-src/src",
       "<!(node -e \"require('nan')\")"
     ]
   }]

@@ -1,13 +1,13 @@
 'use strict'
 
-const ethUtil = require('ethereumjs-util')
-const ethashjs = require('ethashjs')
-const ethHashUtil = require('ethashjs/util')
-const ethashcpp = require('bindings')('ethash')
+const vapUtil = require('vaporyjs-util')
+const vapashjs = require('vapashjs')
+const vapHashUtil = require('vapashjs/util')
+const vapashcpp = require('bindings')('vapash')
 
 var messages = require('./messages')
 
-var Ethash = module.exports = function (cacheDB) {
+var Vapash = module.exports = function (cacheDB) {
   this.dbOpts = {
     valueEncoding: 'json'
   }
@@ -16,33 +16,33 @@ var Ethash = module.exports = function (cacheDB) {
   this.light = false
 }
 
-// ethash_light_new(block_number)
+// vapash_light_new(block_number)
 // returns: { block_number: Number, cache: Buffer }
-Ethash.prototype.ethash_light_new = ethashcpp.ethash_light_new
+Vapash.prototype.vapash_light_new = vapashcpp.vapash_light_new
 
-// ethash_light_compute(light, header_hash, nonce)
+// vapash_light_compute(light, header_hash, nonce)
 // returns: { mix_hash: Buffer, result: Buffer }
-Ethash.prototype.ethash_light_compute = function (light, header_hash, nonce) {
+Vapash.prototype.vapash_light_compute = function (light, header_hash, nonce) {
   if (!light || !light.hasOwnProperty('block_number') || !light.hasOwnProperty('cache')) {
     throw new TypeError(messages.LIGHT_OBJ_INVALID)
   }
-  return ethashcpp.ethash_light_compute(light.block_number, light.cache, header_hash, nonce)
+  return vapashcpp.vapash_light_compute(light.block_number, light.cache, header_hash, nonce)
 }
 
 // mkcache(cacheSize, seed)
 // returns: arrays of cache lines
-Ethash.prototype.mkcache = function (cacheSize, seed) {
+Vapash.prototype.mkcache = function (cacheSize, seed) {
   // get new cache from cpp
-  this.cache = ethashcpp.ethash_light_new_internal(cacheSize, seed)
+  this.cache = vapashcpp.vapash_light_new_internal(cacheSize, seed)
   // cache is a single Buffer here! Not an array of cache lines.
   return this.cache
 }
 
 // run(val, nonce, fullSize)
 // returns: { mix: Buffer, hash: buffer }
-Ethash.prototype.run = function (val, nonce, fullSize) {
+Vapash.prototype.run = function (val, nonce, fullSize) {
   // get new cache from cpp
-  var ret = ethashcpp.ethash_light_compute_internal(this.cache, fullSize, val, nonce)
+  var ret = vapashcpp.vapash_light_compute_internal(this.cache, fullSize, val, nonce)
 
   return {
     mix: ret.mix_hash,
@@ -50,10 +50,10 @@ Ethash.prototype.run = function (val, nonce, fullSize) {
   }
 }
 
-Ethash.prototype.headerHash = ethashjs.prototype.headerHash
+Vapash.prototype.headerHash = vapashjs.prototype.headerHash
 
-Ethash.prototype.cacheHash = function () {
-  return ethUtil.sha3(this.cache)
+Vapash.prototype.cacheHash = function () {
+  return vapUtil.sha3(this.cache)
 }
 
 /**
@@ -62,9 +62,9 @@ Ethash.prototype.cacheHash = function () {
  * @param number Number
  * @param cb function
  */
-Ethash.prototype.loadEpoc = function (number, cb) {
+Vapash.prototype.loadEpoc = function (number, cb) {
   var self = this
-  const epoc = ethHashUtil.getEpoc(number)
+  const epoc = vapHashUtil.getEpoc(number)
 
   if (this.epoc === epoc) {
     return cb()
@@ -75,7 +75,7 @@ Ethash.prototype.loadEpoc = function (number, cb) {
   // gives the seed the first epoc found
   function findLastSeed (epoc, cb2) {
     if (epoc === 0) {
-      return cb2(ethUtil.zeros(32), 0)
+      return cb2(vapUtil.zeros(32), 0)
     }
 
     self.cacheDB.get(epoc, self.dbOpts, function (err, data) {
@@ -90,11 +90,11 @@ Ethash.prototype.loadEpoc = function (number, cb) {
   /* eslint-disable handle-callback-err */
   self.cacheDB.get(epoc, self.dbOpts, function (err, data) {
     if (!data) {
-      self.cacheSize = ethHashUtil.getCacheSize(epoc)
-      self.fullSize = ethHashUtil.getFullSize(epoc)
+      self.cacheSize = vapHashUtil.getCacheSize(epoc)
+      self.fullSize = vapHashUtil.getFullSize(epoc)
 
       findLastSeed(epoc, function (seed, foundEpoc) {
-        self.seed = ethHashUtil.getSeed(seed, foundEpoc, epoc)
+        self.seed = vapHashUtil.getSeed(seed, foundEpoc, epoc)
         var cache = self.mkcache(self.cacheSize, self.seed)
         // store the generated cache
         self.cacheDB.put(epoc, {
@@ -117,6 +117,6 @@ Ethash.prototype.loadEpoc = function (number, cb) {
   /* eslint-enable handle-callback-err */
 }
 
-Ethash.prototype._verifyPOW = ethashjs.prototype._verifyPOW
+Vapash.prototype._verifyPOW = vapashjs.prototype._verifyPOW
 
-Ethash.prototype.verifyPOW = ethashjs.prototype.verifyPOW
+Vapash.prototype.verifyPOW = vapashjs.prototype.verifyPOW

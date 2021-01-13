@@ -1,18 +1,19 @@
 {
-  "name": "node-ethash",
+  "name": "node-vapash",
+  "namespace": "vaporyjs",
   "version": "0.9.0",
-  "description": "Native node bindings for ethash",
+  "description": "Native node bindings for vapash",
   "keywords": [
-    "ethash",
-    "ethereum",
+    "vapash",
+    "vapory",
     "POW"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bolaum/node-ethash.git"
+    "url": "https://github.com/vaporyjs/node-vapash.git"
   },
   "bugs": {
-    "url": "https://github.com/bolaum/node-ethash/issues"
+    "url": "https://github.com/vaporyjs/node-vapash/issues"
   },
   "author": "Thiago Borges Abdnur <bolaum@gmail.com>",
   "license": "MIT",
@@ -28,15 +29,15 @@
   },
   "dependencies": {
     "bindings": "^1.2.1",
-    "ethereumjs-util": "^5.0.1",
-    "ethashjs": "0.0.7",
+    "vaporyjs-util": "^5.1.5",
+    "vapashjs": "0.0.7",
     "nan": "^2.2.1"
   },
   "devDependencies": {
     "benchmark": "^2.1.0",
     "chai": "^4.1.2",
-    "ethereumjs-block": "^1.2.2",
-    "ethereumjs-testing": "1.0.4",
+    "vaporyjs-block": "^1.7.1",
+    "vaporyjs-testing": "1.0.4",
     "istanbul": "^0.4.3",
     "mocha": "^3.1.2",
     "node-gyp": "^3.3.1",
@@ -44,7 +45,7 @@
   },
   "standard": {
     "ignore": [
-      "/src/ethash-src/"
+      "/src/vapash-src/"
     ]
   },
   "gypfile": true
